@@ -65,3 +65,6 @@ Thumbs.db
 /.config/
 /.migration-backup/
 /attached_assets/
+
+# Local original exports and upload-test materials
+/local-only/

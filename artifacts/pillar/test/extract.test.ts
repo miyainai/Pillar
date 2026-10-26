@@ -4,12 +4,10 @@ import * as XLSX from 'xlsx'
 import { extractText } from '../src/lib/extract'
 
 describe('patched SheetJS dependency', () => {
-  it('uses the official patched release in both the app and migration archive', () => {
+  it('uses the official patched release in the app', () => {
     const release = 'https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz'
     const app = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'))
-    const archive = JSON.parse(readFileSync(new URL('../../../.migration-backup/package.json', import.meta.url), 'utf8'))
     expect(app.devDependencies.xlsx).toBe(release)
-    expect(archive.dependencies.xlsx).toBe(release)
     expect(XLSX.version).toBe('0.20.3')
   })
 })

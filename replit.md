@@ -17,8 +17,8 @@ and portfolio-company management. All sample data is fictional.
 - Backend typecheck: `pnpm --filter @workspace/api-server run typecheck`
 - Regenerate API contracts: `pnpm --filter @workspace/api-spec run codegen`
 
-Do not start dev servers at the workspace root. Managed workflows provide
-`PORT` and `BASE_PATH` automatically.
+On Replit, managed workflows provide `PORT` and `BASE_PATH` automatically.
+Outside Replit, use `pnpm dev` at the workspace root; see README.md.
 
 ## Product and persistence
 
@@ -129,8 +129,8 @@ port. Never put server credentials into browser code.
 - `artifacts/api-server/src/routes/pillar.ts`: Express adapter.
 - `lib/api-spec/openapi.yaml`: endpoint contracts.
 - `scripts/src/test-pillar.mjs`: repeatable Playwright browser smoke test.
-- `.migration-backup/`: imported source and original product docs. Dependency
-  records receive security fixes, but the archived source is not a runnable workspace.
+- `docs/Pillar-Debrief.md`: original product and build handoff. The local
+  migration archive is intentionally excluded from this repository.
 - `generated-artifacts/pillar/`, `generated-artifacts/improvements*/`: ignored browser-test screenshots and downloads.
 
 ## Testing notes
@@ -140,5 +140,5 @@ The browser check uses system Chromium on Replit, or
 before the check. It uses a fresh browser context and resets its own demo state.
 Unit tests have a separate Vitest config so they don't need service port variables.
 
-Strict frontend typechecking reports inherited imported-code and unused scaffold
-component errors; zero strict errors was outside the migration scope.
+For the latest verified installation, test, build, and typecheck results, see
+`docs/VALIDATION.md`.
