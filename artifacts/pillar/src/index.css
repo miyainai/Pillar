@@ -1,0 +1,61 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Inter', sans-serif;
+  --color-accent: #5e6ad2;
+  --color-accent-hover: #4f5bc4;
+  --color-accent-soft: #eef0fb;
+  --color-ontrack: #16a34a;
+  --color-atrisk: #d97706;
+  --color-offtrack: #dc2626;
+  --color-notstarted: #9ca3af;
+  --color-complete: #2563eb;
+}
+
+@layer base {
+  /* min-height (not height) so the page itself scrolls and the sticky top bar stays pinned in every browser. */
+  html,
+  body,
+  #root {
+    min-height: 100%;
+  }
+}
+
+body {
+  background: #fafafa;
+  color: #18181b;
+  font-size: 13px;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: 'cv11', 'ss01';
+}
+
+::selection {
+  background: #dfe2f8;
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+.print-only {
+  display: none;
+}
+
+@media print {
+  body {
+    background: white;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .print-only {
+    display: block;
+  }
+  .print-break {
+    break-before: page;
+  }
+  @page {
+    margin: 14mm;
+  }
+}

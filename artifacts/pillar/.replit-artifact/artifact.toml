@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "Pillar"
+description = "A private-equity value creation planning app for deal teams, operating partners, and company management to coordinate plans, updates, data requests, and board reporting."
+version = "1.0.0"
+id = "artifacts/pillar"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 23660
+
+[services.development]
+run = "pnpm --filter @workspace/pillar run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/pillar", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/pillar/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "23660"
+BASE_PATH = "/"

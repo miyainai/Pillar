@@ -1,0 +1,178 @@
+openapi: 3.1.0
+info:
+  # Do not change the title, if the title changes, the import paths will be broken
+  title: Api
+  version: 0.1.0
+  description: API specification
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+    description: Health operations
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      description: Returns server health status
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+  /generate:
+    post:
+      operationId: generatePlan
+      summary: Draft a value creation plan from deal materials
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PlanInput"
+      responses:
+        "200":
+          description: Generated plan
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PlanResult"
+        "503":
+          $ref: "#/components/responses/AiNotConfigured"
+  /regenerate:
+    post:
+      operationId: regeneratePlanItem
+      summary: Revise a pillar or sub-pillar
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RevisionInput"
+      responses:
+        "200":
+          description: Revised item
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AiResult"
+        "503":
+          $ref: "#/components/responses/AiNotConfigured"
+  /suggest:
+    post:
+      operationId: suggestManagementRequest
+      summary: Suggest a management-safe data request
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SuggestionInput"
+      responses:
+        "200":
+          description: Suggested title and description
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AiResult"
+        "503":
+          $ref: "#/components/responses/AiNotConfigured"
+components:
+  responses:
+    AiNotConfigured:
+      description: AI is not configured; the client uses its labeled demo fallback
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ApiError"
+  schemas:
+    ApiError:
+      type: object
+      required: [error]
+      properties:
+        error: { type: string }
+    PlanInput:
+      type: object
+      required: [company, settings, people, documents]
+      properties:
+        company:
+          type: object
+          required: [name, sector, entryEbitda, exitEbitda, holdYears]
+          properties:
+            name: { type: string }
+            sector: { type: string }
+            entryEbitda: { type: number }
+            exitEbitda: { type: number }
+            holdYears: { type: number }
+        settings:
+          type: object
+          required: [pillarCount, detail, levers]
+          properties:
+            pillarCount: { type: integer }
+            detail: { type: string }
+            levers: { type: array, items: { type: string } }
+        people:
+          type: array
+          items: { $ref: "#/components/schemas/PlanPerson" }
+        documents:
+          type: array
+          items: { $ref: "#/components/schemas/DealDocument" }
+    PlanPerson:
+      type: object
+      required: [name, role]
+      properties:
+        name: { type: string }
+        role: { type: string }
+        title: { type: string }
+    DealDocument:
+      type: object
+      required: [name, type, text]
+      properties:
+        name: { type: string }
+        type: { type: string }
+        text: { type: string }
+    RevisionInput:
+      type: object
+      required: [kind, current, instruction, context]
+      properties:
+        kind: { type: string, enum: [pillar, subPillar] }
+        current: { type: object, additionalProperties: true }
+        instruction: { type: string }
+        context:
+          type: object
+          required: [company, people]
+          properties:
+            company: { type: string }
+            parentPillar: { type: string }
+            people:
+              type: array
+              items: { $ref: "#/components/schemas/PlanPerson" }
+    SuggestionInput:
+      type: object
+      required: [title, description, dueDate]
+      properties:
+        title: { type: string }
+        description: { type: string }
+        dueDate: { type: string }
+    PlanResult:
+      type: object
+      required: [plan]
+      properties:
+        plan: { type: object, additionalProperties: true }
+    AiResult:
+      type: object
+      required: [result]
+      properties:
+        result: { type: object, additionalProperties: true }
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      required:
+        - status
+

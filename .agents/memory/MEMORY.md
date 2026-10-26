@@ -1,0 +1,10 @@
+- [TSX instrumentation compatibility](tsx-instrumentation.md) — visual-editor instrumentation can break generic JSX; preserve rendering over optional editor integration.
+- [Executive UX direction](executive-ux.md) — favor simple summaries and progressive disclosure for PE deal leads; retain operational detail without showing it all at once.
+- [Charts and Excel exports](charts-and-exports.md) — every chart/table exports data + chart PNG; hover = tooltip, click = detail panel below; bridge math and Progress-tab scope decisions.
+- [Browser test harness](browser-tests.md) — Playwright scripts live in scripts/src; testing subagent callback is unavailable here; locator gotchas.
+- [Asks model decisions](asks-model.md) — asks are home in the Asks tab (plan links out); multi-owner drag-and-drop picker; downloads from IndexedDB; Field group gotcha.
+- [Demo persona switching](demo-personas.md) — apply `?as=` deep links before React mounts; View-as menu and deep links share one switch path.
+- [Saved-data upgrades](saved-data-upgrades.md) — a seed version bump must keep users' browser-saved plans; upgradeDb only runs on version change, every-load fixes go in merge.
+- [Task validation merges main](task-validation-merge.md) — merge main and re-test before marking complete; sibling tasks can change shared helpers under you.
+- [Files from retired workstreams](retired-workstream-files.md) — gone plan item ⇒ file listed with no workstream, firm only, no update link; no special folder.
+- [Dependency advisories](dependency-advisories.md) — SheetJS CDN fixes differ from npm scanner ranges; migration archive lockfiles are scanned too.
