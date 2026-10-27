@@ -65,6 +65,36 @@ The API uses Anthropic. To enable it, copy `.env.example` to `.env`, set `ANTHRO
 
 AI is optional for the demo. Do not put API keys in frontend code or upload confidential deal materials to this public prototype.
 
+## Deploy to Vercel
+
+Import `miyainai/Pillar` from GitHub into Vercel. Keep **Root Directory** at the
+repository root (`./`) and use **Node.js 24.x**. The checked-in `vercel.json`
+sets the remaining options:
+
+| Setting | Value |
+| --- | --- |
+| Framework preset | Other |
+| Install command | `npx --yes pnpm@11.25.0 install --frozen-lockfile` |
+| Build command | `npx --yes pnpm@11.25.0 run build` |
+| Output directory | `artifacts/pillar/dist/public` |
+
+The frontend and API deploy together. `/api/*` requests go to the Express
+function, static assets are served directly, and other paths fall back to
+`index.html` so refreshing a company page works. The API build exports an app
+for Vercel and a separate listening server for local development and Replit.
+
+No environment variables are required for the seeded demo. Leave
+`ANTHROPIC_API_KEY` unset for the public demo; the app retains its labelled
+fallbacks. Live AI still needs the access and usage controls described below.
+Do not set `PORT`, `BASE_PATH`, or `PILLAR_API_URL` in Vercel.
+
+After deployment, check the homepage, refresh a company page, and open
+`/api/healthz` (expected: `{"status":"ok"}`). With no AI key configured,
+`POST /api/generate` should return HTTP 503 and `{"error":"not_configured"}`.
+
+See Vercel's [Vite deployment guide](https://vercel.com/docs/frameworks/frontend/vite)
+and [Node.js functions guide](https://vercel.com/docs/functions/runtimes/node-js).
+
 ## Build and test
 
 ```sh
@@ -117,7 +147,7 @@ The client uses a Zustand store, a central role projection (`projectView()`), an
 - **No shared multi-user database or cloud file storage.** Real collaboration requires backend persistence, authorization, and file access controls.
 - **No verified financial attribution.** Captured EBITDA is entered by users; plan-to-date is a straight-line assumption, not an accounting reconciliation.
 - **No public AI-service hardening.** Authentication, rate limits, and usage controls are needed before exposing funded AI endpoints to untrusted users.
-- **GitHub hosts the source, not the running application.** Replit deployment configuration is included. Other hosts need an SPA fallback to `index.html` and `/api` routing to Express. The [live demo](https://pillar-oct-26-hackathon.replit.app) is hosted separately on Replit.
+- **GitHub hosts the source, not the running application.** Replit and Vercel deployment configurations are included. Other hosts need an SPA fallback to `index.html` and `/api` routing to Express. The [live demo](https://pillar-oct-26-hackathon.replit.app) is hosted separately on Replit.
 
 ## Project notes
 
